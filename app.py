@@ -464,7 +464,7 @@ def gerar_sugestoes(df, limite_recorrente=0.40, limite_ofensor=0.20):
 # -----------------------------
 # Interface
 # -----------------------------
-st.title("Dashboard de Cubagem de Rotas - v12")
+st.title("Dashboard de Cubagem de Rotas - CD 2900")
 st.caption("Análise por ID de carga, com histórico em Google Sheets, simulação, cargas especiais, tipo de pedido e sugestões automáticas.")
 
 with st.sidebar:
@@ -489,9 +489,8 @@ except FileNotFoundError:
 
 with st.sidebar:
     st.header("Google Sheets / Histórico")
-    sheet_texto = st.text_input("Link ou ID da planilha", value="")
-    sheet_id = extrair_sheet_id(sheet_texto)
-    usar_historico = st.checkbox("Usar histórico do Google Sheets", value=False)
+    sheet_id = "19KiVkhZnPpAap35V6uP9R1eNGAmOlH_WZKWEHUUBMUc"
+usar_historico = True
 
 historico_raw = pd.DataFrame()
 historico_interno = pd.DataFrame()
