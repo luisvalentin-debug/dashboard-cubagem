@@ -478,14 +478,18 @@ with st.sidebar:
         arquivo = planilha_local
         st.caption(f"Usando a planilha local: {planilha_local.name}")
     else:
-        st.error("Envie uma planilha .xlsx ou coloque o arquivo na pasta do app.")
-        st.stop()
+        arquivo = None
+    st.info("Nenhuma base local enviada. Usando histórico do Google Sheets.")
 
-try:
-    base_original, cargas_atual = carregar_dados_excel(arquivo)
-except FileNotFoundError:
-    st.error("Não encontrei a planilha. Coloque o arquivo .xlsx na pasta do app.py ou use o upload.")
-    st.stop()
+if arquivo is not None:
+    try:
+        base_original, cargas_atual = carregar_dados_excel(arquivo)
+    except FileNotFoundError:
+        base_original = pd.DataFrame()
+        cargas_atual = pd.DataFrame()
+else:
+    base_original = pd.DataFrame()
+    cargas_atual = pd.DataFrame()
 
 with st.sidebar:
     st.header("Google Sheets / Histórico")
@@ -520,7 +524,13 @@ elif fonte == "Atual + Histórico" and not historico_interno.empty:
     cargas = pd.concat([historico_interno, cargas_atual], ignore_index=True)
     cargas = cargas.drop_duplicates(subset=["ID de carga"], keep="last")
 else:
-    cargas = cargas_atual.copy()
+    if not cargas_atual.empty:
+        cargas = cargas_atual.copy()
+    elif not historico_interno.empty:
+        cargas = historico_interno.copy()
+    else:
+        st.warning("Nenhuma base disponível. Verifique o histórico do Google Sheets ou envie uma planilha.")
+        st.stop()
 
 cargas_com_especiais = cargas.copy()
 ids_especiais = set(especiais_raw.get("ID de carga", pd.Series(dtype=str)).astype(str).str.strip().tolist()) if not especiais_raw.empty else set()
