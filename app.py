@@ -1308,7 +1308,7 @@ st.title("📊 Painel Transporte CD 2900")
 st.caption("Cubagem + Nível de Serviço 1P/Full + Saída Eclusa, com histórico otimizado no Google Sheets e insights automáticos.")
 
 with st.sidebar:
-    st.header("Base atual")
+    st.header("Base Cubagem")
     upload = st.file_uploader("Enviar base mensal ou diária", type=["xlsx"])
     planilha_local = localizar_planilha_padrao()
     if upload is not None:
